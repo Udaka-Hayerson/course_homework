@@ -12,7 +12,7 @@ public class Main {
             txtHandler.create();
             txtHandler.open();
             txtHandler.change();
-//            txtHandler.save();
+            txtHandler.save();
         } else if (user_answer.equalsIgnoreCase("xml")){
             AbstractHandler xmlHandler = new XMLHandler();
             xmlHandler.create();
