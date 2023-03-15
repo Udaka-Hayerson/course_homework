@@ -1,6 +1,6 @@
-package classchild;
+package jvastartitvdn.classchild;
 
-import static classchild.ClassChild.pubSetClassChild;
+import static jvastartitvdn.classchild.ClassChild.pubSetClassChild;
 
 public class Main {
 

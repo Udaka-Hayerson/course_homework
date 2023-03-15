@@ -1,4 +1,4 @@
-package classparent;
+package jvastartitvdn.classparent;
 
 public class ClassParent {
     public int i;

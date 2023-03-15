@@ -1,4 +1,4 @@
-package classchild;
+package jvastartitvdn.classchild;
 
 public class ClassChild { //extends ClassParent {
     private int number;
@@ -26,8 +26,5 @@ public class ClassChild { //extends ClassParent {
         return new ClassChild(num);
     }
 
-//    public ClassChild(int i) {
-//        super(i);
-//    }
 }
 
