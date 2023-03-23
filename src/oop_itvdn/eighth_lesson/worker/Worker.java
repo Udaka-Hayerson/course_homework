@@ -1,11 +1,9 @@
 package oop_itvdn.eighth_lesson.worker;
-//Вирішення неправельне тому що alphabet_name_index не відображає правельну позицію
-// по причині того що індекси літер бувають двозначені
-// TODO: вирішення проблеми - зробити поле  alphabet_name_index масивом індексів літералів
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ListIterator;
 
 //Задание 2
 //Создайте проект, используя IntelliJ IDEA.
@@ -25,65 +23,85 @@ import java.util.ListIterator;
 
 
 public class Worker {
+
+
     private String surname_and_initials_of_the_employee;
     private String job_title;
     private int year_of_employment;
-    private long alphabet_name_index;
-
+    private final int[] alphabet_name_index;
+    static ArrayList<Worker> workers = new ArrayList<>();;
+    static final char[] ARR_EN = new char[]{'0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     public Worker(String surname_and_initials_of_the_employee, String job_title, int year_of_employment) throws Exception {
+        Exception ex = new Exception("incorrect year_of_employment");
         this.surname_and_initials_of_the_employee = surname_and_initials_of_the_employee;
         this.job_title = job_title;
-        this.year_of_employment = year_of_employment;
+        try {
+            if (year_of_employment < 1923 || year_of_employment > 2023 ) {
+                throw ex;
+            } else {this.year_of_employment = year_of_employment;}
+        } catch (Exception e){
+            this.year_of_employment = 0;
+            System.out.println(e.getMessage());
+        }
         this.alphabet_name_index = generateAlphabetNameIndex(surname_and_initials_of_the_employee);
+        staticArrayWorkers(this);
+    }
+
+    static void workExperienceOfTheEmployee(ArrayList<Worker> workers, BufferedReader reader) throws IOException {
+        Exception ex = new Exception("incorrect work Experience Of The Employee");
+        int experience = Integer.parseInt(reader.readLine());
+        try {
+            if (experience > 80 || experience <= 0 ) {
+                throw ex;
+            } else {
+                for (Worker w: workers) {
+                    if (w.getYear_of_employment() >= experience){
+                        System.out.println(w.getSurname_and_initials_of_the_employee());
+                        System.out.println(2023 - w.getYear_of_employment());
+                    }
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
 
-    public long generateAlphabetNameIndex(String s) { // Harry R.W.
-        char[] arr_en = new char[]{'0','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-        s = (s.replace(" ", "")).replace(".", "");
-        String answerij = "";
-        long index_forij = 0;
-
-//        String answeri = "";
-//        long index_fori = 0;
-
-//1.1 виріщення з двома циклами
-        for (char i: s.toCharArray()) {
-            for(int j = 0; j < arr_en.length; j++) {
-                if(String.valueOf(i).equalsIgnoreCase(String.valueOf(arr_en[j]))) {
-                    index_forij = j;
-                    answerij += index_forij;
+    private int[] generateAlphabetNameIndex(String name) {
+        name = (name.replace(" ", "")).replace(".", "");
+        int [] index = new int[ARR_EN.length];
+        for (int i = 0; i < name.toCharArray().length; i++){  //char i: s.toCharArray()) {
+            for(int j = 0; j < ARR_EN.length; j++) {
+                if(String.valueOf(name.toCharArray()[i]).equalsIgnoreCase(String.valueOf(ARR_EN[j]))) {
+                    index[i] = j;
                 }
             }
         }
-        index_forij = Long.parseLong(answerij);
-
-        // 1.2 виріщення з одним явним циклом і одним підкапотним
-//        for (char i: s.toCharArray()) {
-//            index_fori = Arrays.asList(arr_en).indexOf(i);
-//            answeri += index_fori;
-//
-//        }
-//        index_fori = Long.parseLong(answeri); //error
+        return index;
+    }
 
 
-// просто перевірка чи однакові результати видають спосіб 1.1 і 1.2
-//        if(index_forij == index_fori){
-//            for (int i = 0; i < 19 - answerij.length(); i++) {
-//                answerij += "0";
-//            }
-//            index_forij = Long.parseLong(answerij);
-//
-//        }
-
-        int answerij_length = answerij.length();
-        for (int i = 0; i < 19 - answerij_length; i++) {
-                answerij += "0";
+    private static void staticArrayWorkers(Worker worker) {
+        // algorithm
+        workers.add(worker);
+        if(workers.size() > 1){
+            for (int i = 0; i < workers.size(); i++) {
+                if (i == workers.size() - 1)
+                    break;
+                for (int j = 0; j < workers.get(i).alphabet_name_index.length; j++) {
+                    if(workers.get(i).alphabet_name_index[j] > workers.get(i + 1).alphabet_name_index[j]) {
+                        Worker w = workers.get(i);
+                        workers.set(i, workers.get(i + 1));
+                        workers.set(i + 1, w);
+                        break;
+                    } else if(workers.get(i).alphabet_name_index[j] < workers.get(i + 1).alphabet_name_index[j]) {
+                        break;
+                    }
+                }
             }
-            index_forij = Long.parseLong(answerij);
-
-        return index_forij;
+        }
     }
 
     public String getSurname_and_initials_of_the_employee() {
@@ -110,75 +128,84 @@ public class Worker {
         this.year_of_employment = year_of_employment;
     }
 
-    public long getAlphabet_name_index() {
+    public int[] getAlphabet_name_index() {
         return alphabet_name_index;
     }
 
-    public void setAlphabet_name_index(long alphabet_name_index) {
-        this.alphabet_name_index = alphabet_name_index;
+    public static ArrayList<Worker> getWorkers() {
+        return workers;
     }
 }
 
 
-    class Main {
+    class TestWorker {
+
     public static void main(String[] args) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        Worker worker_n = new Worker(reader.readLine(), reader.readLine(), Integer.parseInt(reader.readLine()));
+        Worker worker_m = new Worker(reader.readLine(), reader.readLine(), Integer.parseInt(reader.readLine()));
+        Worker worker_1 = new Worker("Zalujniy V.F.", "General", 2010);
+        Worker worker_2 = new Worker("Bobetty F.T.", "waiter", 1970);
+        Worker worker_3 = new Worker("Adamson G.D.", "butcher", 1999);
+        Worker worker_4 = new Worker("Charlyrger K.L.", "judge", 2012);
+        Worker worker_5 = new Worker("Jackson J.S.", "singer", 1991);
+        Worker worker_6 = new Worker("Annadaugter A.D.", "killer", 2014);
+        Worker worker_7 = new Worker("Adidas A.A.", "doctor", 1979);
+        Worker worker_8 = new Worker("Harryson R.W.", "lawyer", 2001);
+        Worker worker_9 = new Worker("Jordidash J.H.", "manager", 2002);
+        Worker worker_10 = new Worker("Harrdidun D.R.", "engineer", 2006);
+        Worker worker_11 = new Worker("Chardynder R.D.", "cooker", 2008);
+        Worker worker_12 = new Worker("Haragender O.W.", "pianist", 1988);
+        Worker worker_13 = new Worker("Jadefor U.A.", "teacher", 1960);
+        Worker worker_14 = new Worker("Slabous A.G.", "programmer", 2020);
+        Worker worker_15 = new Worker("Pikula M.S.", "not programmer", 1994);
+        Worker worker_16 = new Worker("Paskuda O.A.", "school director", 2000);
+
+        System.out.println(Worker.workers);
+        Worker.workExperienceOfTheEmployee(Worker.workers, reader);
 
 
-//        char[] arr_EN = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-//        long 19characters = 9223372036854775807
+        for (Worker w: Worker.workers) {
+            System.out.println(w.getSurname_and_initials_of_the_employee() + " " + w.getJob_title() + " " + w.getYear_of_employment());
+            for (int i: w.getAlphabet_name_index()){
+                System.out.print(i + " ");
+            }
+            System.out.println("");
+        }
 
-
-        Worker worker_1 = new Worker("Harry R.W.", "engineer", 1999);
-        Worker worker_2 = new Worker("Bob F.T.", "waiter", 1970);
-        Worker worker_3 = new Worker("Adam G.D.", "butcher", 2003);
-        Worker worker_4 = new Worker("Charly K.L.", "judge", 2012);
-        Worker worker_5 = new Worker("Jack J.S.", "programmer", 1991);
-        Worker worker_6 = new Worker("Anna O.P.", "killer", 2020);
-
-        Worker [] workers = new Worker[]{worker_3, worker_6, worker_2, worker_4, worker_1, worker_5};
-
-        System.out.println(workers);
-
-
-
-        System.out.println("" + worker_1.getAlphabet_name_index());
-        System.out.println("" + worker_2.getAlphabet_name_index());
-        System.out.println("" + worker_3.getAlphabet_name_index());
-        System.out.println("" + worker_4.getAlphabet_name_index());
-        System.out.println("" + worker_5.getAlphabet_name_index());
-        System.out.println("" + worker_6.getAlphabet_name_index());
-//        8118182518230000000
-//        2152620000000000000
-//        1411374000000000000
-//        3811812251112000000
-//        1013111019000000000
-//        1141411516000000000
-
-
-
+        //Adamson G.D. butcher 1999
+        //1 4 1 13 19 15 14 7 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Adidas A.A. doctor 1979
+        //1 4 9 4 1 19 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Annadaugter A.D. killer 2014
+        //1 14 14 1 4 1 21 7 20 5 18 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Bobetty F.T. waiter 1970
+        //2 15 2 5 20 20 25 6 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Chardynder R.D. cooker 2008
+        //3 8 1 18 4 25 14 4 5 18 18 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Charlyrger K.L. judge 2012
+        //3 8 1 18 12 25 18 7 5 18 11 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Haragender O.W. pianist 1988
+        //8 1 18 1 7 5 14 4 5 18 15 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Harrdidun D.R. engineer 2006
+        //8 1 18 18 4 9 4 21 14 4 18 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Harryson R.W. lawyer 2001
+        //8 1 18 18 25 19 15 14 18 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Jackson J.S. singer 1991
+        //10 1 3 11 19 15 14 10 19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Jadefor U.A. teacher 1960
+        //10 1 4 5 6 15 18 21 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Jordidash J.H. manager 2002
+        //10 15 18 4 9 4 1 19 8 10 8 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Pikula M.S. not programmer 1994
+        //16 9 11 21 12 1 13 19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Slabous A.G. programmer 2020
+        //19 12 1 2 15 21 19 1 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Paskuda O.A. school director 2000
+        //16 1 19 11 21 4 1 15 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        //Zalujniy V.F. General 2010
+        //26 1 12 21 10 14 9 25 22 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
