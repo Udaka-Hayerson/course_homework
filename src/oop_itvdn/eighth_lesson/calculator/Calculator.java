@@ -35,19 +35,35 @@ public class Calculator {
 
 }
 class TestCalculator {
+    static double a;
+    static int aa;
+    static double b ;
+    static int bb;
+
 
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Enter the first number");
         String sa = reader.readLine();
-        double a = Double.parseDouble(sa);
-        int aa = Integer.parseInt(sa);
+        try {
+            a = Double.parseDouble(sa);
+            aa = Integer.parseInt(sa);
+            throw new Exception("Wrong Answer");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
 
         System.out.println("Enter the second number");
         String sb = reader.readLine();
-        double b = Double.parseDouble(sb);
-        int bb = Integer.parseInt(sb);
+        try {
+            b = Double.parseDouble(sb);
+            bb = Integer.parseInt(sb);
+            throw new Exception("Wrong Answer");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         System.out.println("Enter operation");
         String user_answer = reader.readLine();
@@ -63,7 +79,12 @@ class TestCalculator {
         } else if (user_answer.equalsIgnoreCase("-")){
             System.out.println(calculator.subtraction(a, b));
         } else {
-            System.out.println("Wrong Answer");
+            try {
+                throw new Exception("Wrong Answer");
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
         }
 
         switch (user_answer) {

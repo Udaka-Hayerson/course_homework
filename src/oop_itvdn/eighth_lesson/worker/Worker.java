@@ -33,12 +33,11 @@ public class Worker {
     static final char[] ARR_EN = new char[]{'0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     public Worker(String surname_and_initials_of_the_employee, String job_title, int year_of_employment) throws Exception {
-        Exception ex = new Exception("incorrect year_of_employment");
         this.surname_and_initials_of_the_employee = surname_and_initials_of_the_employee;
         this.job_title = job_title;
         try {
             if (year_of_employment < 1923 || year_of_employment > 2023 ) {
-                throw ex;
+                throw new Exception("incorrect year_of_employment");
             } else {this.year_of_employment = year_of_employment;}
         } catch (Exception e){
             this.year_of_employment = 0;
