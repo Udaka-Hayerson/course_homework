@@ -9,13 +9,17 @@ package oop_itvdn.tenth_lesson.test_solution;
 //элементов.
 
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 public interface Pikterface<P> {
 
     void add(P value, boolean b);
 
     P getElementOfIndex(int index);
 
-    void setValueOfKey(P value , int index);
+    void setValueOfKey(P value, int index);
 
     int getIndexOfValue(P value);
 
@@ -42,8 +46,8 @@ class PikuList<P> implements Pikterface<P> {
     }
 
     public void increasingSizePikuList(boolean b) {
-        Object[] new_array = new Object[(int)add_count + 1];
-        if (b){
+        Object[] new_array = new Object[(int) add_count + 1];
+        if (b) {
 
             for (int i = 0; i < new_array.length; i++) {
                 if (i < add_count) {
@@ -54,7 +58,7 @@ class PikuList<P> implements Pikterface<P> {
             }
         } else {
             for (int i = 0; i < new_array.length; i++) {
-                if (i == 0){
+                if (i == 0) {
                     new_array[i] = null;
                 } else {
                     new_array[i] = pikulist[i - 1];
@@ -69,7 +73,7 @@ class PikuList<P> implements Pikterface<P> {
 
 
     public void add(P value, boolean b) {
-        if (b){
+        if (b) {
             this.increasingSizePikuList(b);
             pikulist[add_count] = value;
             this.setAddcount(this.getAddcount() + 1);
@@ -82,7 +86,7 @@ class PikuList<P> implements Pikterface<P> {
     }
 
     public P getElementOfIndex(int index) {
-        if(index > pikulength - 1 || index < 0) {
+        if (index > pikulength - 1 || index < 0) {
             try {
                 throw new IndexOutOfBoundsException("Index Out Of Bounds");
             } catch (IndexOutOfBoundsException e) {
@@ -94,19 +98,19 @@ class PikuList<P> implements Pikterface<P> {
 
     public int getIndexOfValue(Object value) {
         for (int i = 0; i < pikulength; i++) {
-            if (value.equals(pikulist[i])){
+            if (value.equals(pikulist[i])) {
                 return i;
             }
         }
         return -1;
- }
+    }
 
     public void setValueOfKey(P value, int index) {
-        if(index == add_count){ //pikulength
+        if (index == add_count) { //pikulength
             this.add(value, true);
-        } else if(index > 0 && index > add_count && index < pikulength){
+        } else if (index > 0 && index > add_count && index < pikulength) {
             pikulist[index] = value;
-        } else if(index >= pikulength){
+        } else if (index >= pikulength) {
             this.setAddcount(index + 1);
             this.increasingSizePikuList(true);
 
@@ -160,17 +164,37 @@ class PikuList<P> implements Pikterface<P> {
 //        modCount++;
 //    }
 
-class PikuTest {
+class PikuTest extends Object {
     public static void main(String[] args) {
         PikuList<String> pl = new PikuList<>();
+        extracted(pl);
+        List<String> list = getStrings(pl);
+
+
+        extracted(list);
+
+
+    }
+
+    private static List<String> getStrings(PikuList<String> pl) {
+        for (int i = 0; i < pl.size(); i++) System.out.print(pl.getElementOfIndex(i));
+        List<String> list = Arrays.asList("p", "a", "s", "t", "e");
+        return list;
+    }
+
+    private static void extracted(PikuList<String> pl) {
         pl.add("I", true);
         pl.add("K", true);
         pl.add("U", true);
         pl.add("L", true);
         pl.add("A", true);
         pl.add("P", false);
-        for (int i = 0; i < pl.size(); i++) {
-            System.out.print(pl.getElementOfIndex(i));
+    }
+
+    private static void extracted(List<String> list) {
+        for (Iterator<String> iterator = list.iterator(); iterator.hasNext(); ) {
+            String next = iterator.next();
+            System.out.println("next = " + next);
         }
     }
 }

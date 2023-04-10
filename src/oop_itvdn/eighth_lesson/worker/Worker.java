@@ -3,7 +3,10 @@ package oop_itvdn.eighth_lesson.worker;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 //Задание 2
 //Создайте проект, используя IntelliJ IDEA.
@@ -29,9 +32,13 @@ public class Worker {
     private String job_title;
     private int year_of_employment;
     private final int[] alphabet_name_index;
-    static ArrayList<Worker> workers = new ArrayList<>();;
-    static final char[] ARR_EN = new char[]{'0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-
+    private final BigInteger alphabet_name_index_count; // числове представлення масиву отримане множенням його значення на його індекс
+    static ArrayList<Worker> workers = new ArrayList<>();
+//    static ArrayList<Worker> workers_i_count = new ArrayList<>();
+    static ArrayList<Integer> truncated_array = new ArrayList<>();
+//    static final char[] ARR_EN = new char[]{'0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    static final char[] ABC_WITHOUT_0_TO_9 = new char[]{'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'a', 'b', 'c', 'd',
+            'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     public Worker(String surname_and_initials_of_the_employee, String job_title, int year_of_employment) throws Exception {
         this.surname_and_initials_of_the_employee = surname_and_initials_of_the_employee;
         this.job_title = job_title;
@@ -44,7 +51,9 @@ public class Worker {
             System.out.println(e.getMessage());
         }
         this.alphabet_name_index = generateAlphabetNameIndex(surname_and_initials_of_the_employee);
+        this.alphabet_name_index_count = generateAlphabetNameIndexCount(truncated_array);
         staticArrayWorkers(this);
+//        staticArrayWorkersCountIndex(this);
     }
 
     static void workExperienceOfTheEmployee(ArrayList<Worker> workers, BufferedReader reader) throws IOException {
@@ -70,15 +79,32 @@ public class Worker {
 
     private int[] generateAlphabetNameIndex(String name) {
         name = (name.replace(" ", "")).replace(".", "");
-        int [] index = new int[ARR_EN.length];
-        for (int i = 0; i < name.toCharArray().length; i++){  //char i: s.toCharArray()) {
-            for(int j = 0; j < ARR_EN.length; j++) {
-                if(String.valueOf(name.toCharArray()[i]).equalsIgnoreCase(String.valueOf(ARR_EN[j]))) {
+        char [] array_name = name.toCharArray();
+        int [] index = new int[ABC_WITHOUT_0_TO_9.length - 10];
+        ArrayList<Integer> index_truncated_array = new ArrayList<>(array_name.length);
+        for (int i = 0; i < array_name.length; i++) {
+            for(int j = 10; j < ABC_WITHOUT_0_TO_9.length; j++) {
+                if(String.valueOf(array_name[i]).equalsIgnoreCase(String.valueOf(ABC_WITHOUT_0_TO_9[j]))) {
                     index[i] = j;
+                    index_truncated_array.add(j);
                 }
             }
         }
+        truncated_array = index_truncated_array;
         return index;
+    }
+
+    private BigInteger generateAlphabetNameIndexCount(ArrayList<Integer> abc) {
+        String s_name_index = "";
+        for (int i = 0; i < ABC_WITHOUT_0_TO_9.length - 10; i++) {
+
+            if (i < abc.size()) {
+                s_name_index += abc.get(i);
+            } else {
+                s_name_index += "00";
+            }
+        }
+        return new BigInteger(s_name_index);
     }
 
 
@@ -102,6 +128,11 @@ public class Worker {
             }
         }
     }
+
+//    private static void staticArrayWorkersCountIndex(Worker worker) {
+//        workers_i_count.add(worker);
+//
+//    }
 
     public String getSurname_and_initials_of_the_employee() {
         return surname_and_initials_of_the_employee;
@@ -130,6 +161,9 @@ public class Worker {
     public int[] getAlphabet_name_index() {
         return alphabet_name_index;
     }
+    public BigInteger getAlphabet_name_index_count() {
+        return alphabet_name_index_count;
+    }
 
     public static ArrayList<Worker> getWorkers() {
         return workers;
@@ -140,10 +174,11 @@ public class Worker {
     class TestWorker {
 
     public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Worker worker_n = new Worker(reader.readLine(), reader.readLine(), Integer.parseInt(reader.readLine()));
         Worker worker_m = new Worker(reader.readLine(), reader.readLine(), Integer.parseInt(reader.readLine()));
+
         Worker worker_1 = new Worker("Zalujniy V.F.", "General", 2010);
         Worker worker_2 = new Worker("Bobetty F.T.", "waiter", 1970);
         Worker worker_3 = new Worker("Adamson G.D.", "butcher", 1999);
@@ -161,50 +196,78 @@ public class Worker {
         Worker worker_15 = new Worker("Pikula M.S.", "not programmer", 1994);
         Worker worker_16 = new Worker("Paskuda O.A.", "school director", 2000);
 
-        System.out.println(Worker.workers);
         Worker.workExperienceOfTheEmployee(Worker.workers, reader);
 
-
+        System.out.println(Worker.workers);
+//        System.out.println(Worker.workers_i_count);
         for (Worker w: Worker.workers) {
             System.out.println(w.getSurname_and_initials_of_the_employee() + " " + w.getJob_title() + " " + w.getYear_of_employment());
+            System.out.println(w.getAlphabet_name_index_count());
             for (int i: w.getAlphabet_name_index()){
                 System.out.print(i + " ");
             }
             System.out.println("");
         }
 
-        //Adamson G.D. butcher 1999
-        //1 4 1 13 19 15 14 7 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Adidas A.A. doctor 1979
-        //1 4 9 4 1 19 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Annadaugter A.D. killer 2014
-        //1 14 14 1 4 1 21 7 20 5 18 1 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Bobetty F.T. waiter 1970
-        //2 15 2 5 20 20 25 6 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Chardynder R.D. cooker 2008
-        //3 8 1 18 4 25 14 4 5 18 18 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Charlyrger K.L. judge 2012
-        //3 8 1 18 12 25 18 7 5 18 11 12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Haragender O.W. pianist 1988
-        //8 1 18 1 7 5 14 4 5 18 15 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Harrdidun D.R. engineer 2006
-        //8 1 18 18 4 9 4 21 14 4 18 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Harryson R.W. lawyer 2001
-        //8 1 18 18 25 19 15 14 18 23 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Jackson J.S. singer 1991
-        //10 1 3 11 19 15 14 10 19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Jadefor U.A. teacher 1960
-        //10 1 4 5 6 15 18 21 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Jordidash J.H. manager 2002
-        //10 15 18 4 9 4 1 19 8 10 8 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Pikula M.S. not programmer 1994
-        //16 9 11 21 12 1 13 19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Slabous A.G. programmer 2020
-        //19 12 1 2 15 21 19 1 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Paskuda O.A. school director 2000
-        //16 1 19 11 21 4 1 15 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-        //Zalujniy V.F. General 2010
-        //26 1 12 21 10 14 9 25 22 6 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+//        for (Worker w: Worker.workers_i_count) {
+//            System.out.println(w.getSurname_and_initials_of_the_employee() + " " + w.getJob_title() + " " + w.getYear_of_employment());
+//            System.out.println(w.getAlphabet_name_index_count());
+//        }
+
+
+/*        output
+
+        Adamson G.D. butcher 1999
+        1013102228242316130000000000000000000000000000000000
+        10 13 10 22 28 24 23 16 13 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Adidas A.A. doctor 1979
+        1013181310281010000000000000000000000000000000000000
+        10 13 18 13 10 28 10 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Annadaugter A.D. killer 2014
+        1023231013103016291427101300000000000000000000000000
+        10 23 23 10 13 10 30 16 29 14 27 10 13 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Bobetty F.T. waiter 1970
+        1124111429293415290000000000000000000000000000000000
+        11 24 11 14 29 29 34 15 29 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Chardynder R.D. cooker 2008
+        1217102713342313142727130000000000000000000000000000
+        12 17 10 27 13 34 23 13 14 27 27 13 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Charlyrger K.L. judge 2012
+        1217102721342716142720210000000000000000000000000000
+        12 17 10 27 21 34 27 16 14 27 20 21 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Haragender O.W. pianist 1988
+        1710271016142313142724320000000000000000000000000000
+        17 10 27 10 16 14 23 13 14 27 24 32 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Harrdidun D.R. engineer 2006
+        1710272713181330231327000000000000000000000000000000
+        17 10 27 27 13 18 13 30 23 13 27 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Harryson R.W. lawyer 2001
+        1710272734282423273200000000000000000000000000000000
+        17 10 27 27 34 28 24 23 27 32 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Jackson J.S. singer 1991
+        1910122028242319280000000000000000000000000000000000
+        19 10 12 20 28 24 23 19 28 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Jadefor U.A. teacher 1960
+        1910131415242730100000000000000000000000000000000000
+        19 10 13 14 15 24 27 30 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Jordidash J.H. manager 2002
+        1924271318131028171917000000000000000000000000000000
+        19 24 27 13 18 13 10 28 17 19 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Pikula M.S. not programmer 1994
+        2518203021102228000000000000000000000000000000000000
+        25 18 20 30 21 10 22 28 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Slabous A.G. programmer 2020
+        2821101124302810160000000000000000000000000000000000
+        28 21 10 11 24 30 28 10 16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Paskuda O.A. school director 2000
+        2510282030131024100000000000000000000000000000000000
+        25 10 28 20 30 13 10 24 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        Zalujniy V.F. General 2010
+        3510213019231834311500000000000000000000000000000000
+        35 10 21 30 19 23 18 34 31 15 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+        output*/
+
 
     }
 }
