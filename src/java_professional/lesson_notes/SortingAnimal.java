@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-class AnimalSort implements Comparable {
+class AnimalSort implements Comparable<AnimalSort> {
 
 
     static final char[] ABC_WITHOUT_0_TO_9 = new char[]{'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'a', 'b', 'c', 'd',
@@ -37,7 +37,18 @@ class AnimalSort implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(AnimalSort a) { // implements Comparable<AnimalSort>
+        int s = this.speed - a.speed;
+        int p = this.price - a.price;
+        int w = this.weight - a.weight;
+        if (s != 0) return s;
+        else if (p != 0) return p;
+        else if (w != 0) return w;
+        else return this.breed.compareTo(a.breed);
+    }
+
+/*    @Override
+    public int compareTo(Object o) {  // implements Comparable
         int s = this.speed - ((AnimalSort)o).speed;
         int p = this.price - ((AnimalSort)o).price;
         int w = this.weight - ((AnimalSort)o).weight;
@@ -54,7 +65,7 @@ class AnimalSort implements Comparable {
             }
             return 0;
         }
-    }
+    }*/
 
 
 /* TODO: update - варіант @Override з числом alphabet_name_index_count не працює
@@ -107,10 +118,10 @@ class AnimalSort implements Comparable {
 
 }
 
-public class SortingStudents {
+public class SortingAnimal {
     public static void main(String[] args) {
         extractedSort();
-        extracted();
+//        extracted();
 
     }
 
