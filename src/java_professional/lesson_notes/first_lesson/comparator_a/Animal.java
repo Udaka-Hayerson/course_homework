@@ -1,4 +1,4 @@
-package java_professional.lesson_notes.comparator_a;
+package java_professional.lesson_notes.first_lesson.comparator_a;
 
 import java.util.Comparator;
 

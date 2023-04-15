@@ -1,6 +1,5 @@
-package java_professional.lesson_notes;
+package java_professional.lesson_notes.first_lesson;
 
-import java.sql.Array;
 import java.util.*;
 
 class Animal{

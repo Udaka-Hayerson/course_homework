@@ -1,4 +1,4 @@
-package java_professional.lesson_notes;
+package java_professional.lesson_notes.first_lesson;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

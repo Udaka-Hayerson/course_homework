@@ -1,4 +1,4 @@
-package java_professional.first_lesson;
+package java_professional.lesson_notes.first_lesson;
 
 import java.util.Arrays;
 
