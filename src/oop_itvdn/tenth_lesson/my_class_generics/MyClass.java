@@ -8,6 +8,8 @@ package oop_itvdn.tenth_lesson.my_class_generics;
 
 //Cannot Create Instances of Type Parameters
 
+import java.lang.reflect.Field;
+
 public class MyClass {
     public static <T> T fabric(Class<T> cls) throws Exception {
         T elem = cls.getDeclaredConstructor().newInstance(); // OK
@@ -15,6 +17,14 @@ public class MyClass {
     }
 }
 
+//class MyClassGen<T> {
+//    T field = (T) new Object();
+//
+//    public T genFabric() throws NoSuchFieldException {
+//        Object o = new Object(); // OK
+//        return (T) o;
+//    }
+//}
 //public class MyClass<T> {
 //    class Inner extends T {
 //        public Inner() {
