@@ -91,7 +91,7 @@ public class SimpleSerialization {
         Student student = new Student(1, "Mykola");
         student.setGroup(group);
         group.setStudent(student);
-/*       If student.toString() will refer to groop.toString(),
+/*       If student.toString() will refer to group.toString() , and group.toString()  will refer to student.toString()
         then we will get a recursive call of obj..toString() and as a result java.lang.StackOverflowError .
         Solution of this problem - student.hashCode() or student.getField() */
 
