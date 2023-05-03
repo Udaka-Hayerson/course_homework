@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog>
+    <book title="the lord of the rings 1">Book 1
+        <author>Author 1</author>
+    </book>
+    <book title="the lord of the rings 2">Book 2
+        <author>Author 2</author>
+    </book>
+    <book title="the lord of the rings 3">Book 3
+        <author>Author 3</author>
+    </book>
+</catalog>

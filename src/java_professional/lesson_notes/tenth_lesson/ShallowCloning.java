@@ -1,5 +1,4 @@
 package java_professional.lesson_notes.tenth_lesson;
-// git commit -m "Cloning in Java, interface Cloneable"
 
 class Student implements Cloneable{
     public String name;
