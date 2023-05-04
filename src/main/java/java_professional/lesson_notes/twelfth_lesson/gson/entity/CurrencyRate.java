@@ -16,9 +16,9 @@ public class CurrencyRate {
     public CurrencyRate() {
     }
 
-    public CurrencyRate(String base_ccy, String ccy, BigDecimal buy, BigDecimal sale) {
-        this.from = base_ccy;
-        this.to = ccy;
+    public CurrencyRate(String from, String to, BigDecimal buy, BigDecimal sale) {
+        this.from = from;
+        this.to = to;
         this.buy = buy;
         this.sale = sale;
     }
